@@ -1,4 +1,4 @@
-#import "SVPullToRefresh.h"
+#import "UIScrollView+SVPullToRefresh.h"
 
 @protocol SVPullToRefreshViewProtocol
 

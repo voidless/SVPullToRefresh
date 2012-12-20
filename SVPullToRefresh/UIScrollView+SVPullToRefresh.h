@@ -8,7 +8,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AvailabilityMacros.h>
 #import "SVPullToRefreshControl.h"
 
 typedef enum {
@@ -22,10 +21,9 @@ typedef enum {
 
 @interface UIScrollView (SVPullToRefresh)
 
-- (void)addPullToRefreshWithActionHandler:(ActionHandler)actionHandler pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)pullToRefreshView;
+- (void)addPullToRefreshWithActionHandler:(PullToRefreshActionHandler)actionHandler pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)pullToRefreshView;
 
 @property (nonatomic, strong, readonly) SVPullToRefreshControl *pullToRefreshControl;
 @property (nonatomic, assign) BOOL showsPullToRefresh;
-
 
 @end

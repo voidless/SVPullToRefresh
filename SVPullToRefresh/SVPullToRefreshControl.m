@@ -1,5 +1,5 @@
 #import "SVPullToRefreshControl.h"
-#import "SVPullToRefresh.h"
+#import "UIScrollView+SVPullToRefresh.h"
 #import "SVPullToRefreshDefaultView.h"
 
 #define CHANGE_CONTENT_INSET_ANIM_DURATION 0.3
@@ -12,14 +12,14 @@
     __weak UIScrollView *scrollView;
     CGFloat originalTopInset;
     CGFloat viewHeight;
-    ActionHandler actionHandler;
+    PullToRefreshActionHandler actionHandler;
 }
 @synthesize observing;
 @synthesize hidden;
 @synthesize state;
 @synthesize pullToRefreshView;
 
-- (id)initWithScrollView:(UIScrollView *)_scrollView pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)_pullToRefreshView actionHandler:(ActionHandler)_handler {
+- (id)initWithScrollView:(UIScrollView *)_scrollView pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)_pullToRefreshView actionHandler:(PullToRefreshActionHandler)_handler {
     if (self = [super init]) {
         scrollView = _scrollView;
         originalTopInset = _scrollView.contentInset.top;
@@ -32,7 +32,7 @@
     return self;
 }
 
-- (id)initWithScrollView:(UIScrollView *)_scrollView actionHandler:(ActionHandler)_handler {
+- (id)initWithScrollView:(UIScrollView *)_scrollView actionHandler:(PullToRefreshActionHandler)_handler {
     UIView <SVPullToRefreshViewProtocol> *defaultView = [[SVPullToRefreshDefaultView alloc] initWithWidth:_scrollView.bounds.size.width];
     return [self initWithScrollView:_scrollView pullToRefreshView:defaultView actionHandler:_handler];
 }
@@ -45,7 +45,8 @@
 
 - (void)setHidden:(BOOL)_hidden {
     hidden = _hidden;
-    self.state = SVPullToRefreshStateStopped;
+    if (hidden)
+        self.state = SVPullToRefreshStateStopped;
 }
 
 - (void)setState:(SVPullToRefreshState)newState {
@@ -82,9 +83,12 @@
     [pullToRefreshView removeFromSuperview];
     pullToRefreshView = _pullToRefreshView;
     viewHeight = pullToRefreshView.bounds.size.height;
-    pullToRefreshView.frame = CGRectMake(0, -viewHeight, _pullToRefreshView.bounds.size.width, viewHeight);
+    pullToRefreshView.frame = CGRectMake(0, -viewHeight, pullToRefreshView.bounds.size.width, viewHeight);
     [scrollView addSubview:pullToRefreshView];
     pullToRefreshView.state = self.state;
+
+    if (!self.hidden && self.state == SVPullToRefreshStateLoading)
+        [self setScrollViewContentInsetForLoading];
 }
 
 #pragma mark Scroll View

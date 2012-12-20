@@ -8,38 +8,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SVInfiniteScrollingControl.h"
 
-@class SVInfiniteScrollingView;
-
-@interface UIScrollView (SVInfiniteScrolling)
-
-- (void)addInfiniteScrollingWithActionHandler:(void (^)(void))actionHandler;
-- (void)triggerInfiniteScrolling;
-
-@property (nonatomic, strong, readonly) SVInfiniteScrollingView *infiniteScrollingView;
-@property (nonatomic, assign) BOOL showsInfiniteScrolling;
-
-@end
-
-
-enum {
+typedef enum {
 	SVInfiniteScrollingStateStopped = 0,
     SVInfiniteScrollingStateTriggered,
     SVInfiniteScrollingStateLoading,
     SVInfiniteScrollingStateAll = 10
-};
+} SVInfiniteScrollingState;
 
-typedef NSUInteger SVInfiniteScrollingState;
+@class SVInfiniteScrollingControl;
 
-@interface SVInfiniteScrollingView : UIView
+@interface UIScrollView (SVInfiniteScrolling)
 
-@property (nonatomic, readwrite) UIActivityIndicatorViewStyle activityIndicatorViewStyle;
-@property (nonatomic, readonly) SVInfiniteScrollingState state;
-@property (nonatomic, readwrite) BOOL enabled;
+- (void)addInfiniteScrollingWithActionHandler:(InfiniteScrollingActionHandler)actionHandler infiniteScrollingView:(UIView <SVInfiniteScrollingViewProtocol> *)infiniteScrollingView;
 
-- (void)setCustomView:(UIView *)view forState:(SVInfiniteScrollingState)state;
-
-- (void)startAnimating;
-- (void)stopAnimating;
+@property (nonatomic, strong, readonly) SVInfiniteScrollingControl *infiniteScrollingControl;
+@property (nonatomic, assign) BOOL showsInfiniteScrolling;
 
 @end

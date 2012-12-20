@@ -2,7 +2,7 @@
 
 @protocol SVPullToRefreshViewProtocol;
 
-typedef void (^ActionHandler)(void);
+typedef void (^PullToRefreshActionHandler)(void);
 
 @interface SVPullToRefreshControl : NSObject
 
@@ -10,8 +10,8 @@ typedef void (^ActionHandler)(void);
 @property (nonatomic, assign) BOOL hidden;
 @property (nonatomic, strong) UIView <SVPullToRefreshViewProtocol> *pullToRefreshView;
 
-- (id)initWithScrollView:(UIScrollView *)scrollView pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)pullToRefreshView actionHandler:(ActionHandler)handler;
-- (id)initWithScrollView:(UIScrollView *)scrollView actionHandler:(ActionHandler)handler;
+- (id)initWithScrollView:(UIScrollView *)scrollView pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)pullToRefreshView actionHandler:(PullToRefreshActionHandler)handler;
+- (id)initWithScrollView:(UIScrollView *)scrollView actionHandler:(PullToRefreshActionHandler)handler;
 
 - (void)loadingCompleted;
 

@@ -16,7 +16,7 @@ static char UIScrollViewPullToRefreshControl;
 
 @dynamic pullToRefreshControl, showsPullToRefresh;
 
-- (void)addPullToRefreshWithActionHandler:(ActionHandler)actionHandler pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)pullToRefreshView {
+- (void)addPullToRefreshWithActionHandler:(PullToRefreshActionHandler)actionHandler pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)pullToRefreshView {
     if(!self.pullToRefreshControl) {
         SVPullToRefreshControl *control = pullToRefreshView ?
                 [[SVPullToRefreshControl alloc] initWithScrollView:self pullToRefreshView:pullToRefreshView actionHandler:actionHandler] :
