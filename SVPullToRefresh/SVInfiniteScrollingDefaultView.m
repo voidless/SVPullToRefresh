@@ -78,7 +78,6 @@ static CGFloat const SVInfiniteScrollingViewHeight = 60;
 #pragma mark -
 
 - (void)setState:(SVInfiniteScrollingState)newState {
-    NSLog(@"%s", sel_getName(_cmd));
     if(_state == newState)
         return;
 
