@@ -22,6 +22,8 @@ typedef enum {
 @interface UIScrollView (SVInfiniteScrolling)
 
 - (void)addInfiniteScrollingWithActionHandler:(InfiniteScrollingActionHandler)actionHandler infiniteScrollingView:(UIView <SVInfiniteScrollingViewProtocol> *)infiniteScrollingView;
+- (void)removeInfiniteScrolling;
+
 
 @property (nonatomic, strong, readonly) SVInfiniteScrollingControl *infiniteScrollingControl;
 @property (nonatomic, assign) BOOL showsInfiniteScrolling;

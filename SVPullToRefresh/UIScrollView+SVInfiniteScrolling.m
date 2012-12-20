@@ -63,4 +63,9 @@ static char UIScrollViewInfiniteScrollingControl;
     return !self.infiniteScrollingControl.hidden;
 }
 
+- (void)removeInfiniteScrolling {
+    self.showsInfiniteScrolling = NO;
+    self.infiniteScrollingControl = nil;
+}
+
 @end

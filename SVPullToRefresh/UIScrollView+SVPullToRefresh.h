@@ -22,6 +22,7 @@ typedef enum {
 @interface UIScrollView (SVPullToRefresh)
 
 - (void)addPullToRefreshWithActionHandler:(PullToRefreshActionHandler)actionHandler pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)pullToRefreshView;
+- (void)removePullToRefresh;
 
 @property (nonatomic, strong, readonly) SVPullToRefreshControl *pullToRefreshControl;
 @property (nonatomic, assign) BOOL showsPullToRefresh;
