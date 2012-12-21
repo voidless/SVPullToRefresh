@@ -124,28 +124,32 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"contentOffset"])
-        [self scrollViewDidScroll:[[change valueForKey:NSKeyValueChangeNewKey] CGPointValue]];
+        [self scrollViewDidScroll:[[change valueForKey:NSKeyValueChangeNewKey] CGPointValue] force:NO];
     else if ([keyPath isEqualToString:@"frame"]) {
         [infiniteScrollingView layoutSubviews];
         [self updateInfiniteScrollingViewFrame];
+        [self scrollViewDidScroll:scrollView.contentOffset force:YES];
     }
     else if([keyPath isEqualToString:@"contentSize"]) {
         [infiniteScrollingView layoutSubviews];
         [self updateInfiniteScrollingViewFrame];
+        [self scrollViewDidScroll:scrollView.contentOffset force:YES];
     }
 }
 
-- (void)scrollViewDidScroll:(CGPoint)contentOffset {
+- (void)scrollViewDidScroll:(CGPoint)contentOffset force:(BOOL)force {
     if (self.state != SVInfiniteScrollingStateLoading) {
         CGFloat scrollViewContentHeight = scrollView.contentSize.height;
         CGFloat scrollOffsetThreshold = scrollViewContentHeight - scrollView.bounds.size.height;
 
-        if (!scrollView.isDragging && self.state == SVInfiniteScrollingStateTriggered && !scrollView.isDragging)
-            self.state = SVInfiniteScrollingStateLoading;
-        else if (contentOffset.y > scrollOffsetThreshold && self.state == SVInfiniteScrollingStateStopped && scrollView.isDecelerating)
+        if (contentOffset.y > scrollOffsetThreshold && self.state == SVInfiniteScrollingStateStopped && (scrollView.isDecelerating || force))
             self.state = SVInfiniteScrollingStateTriggered;
-        else if (contentOffset.y < scrollOffsetThreshold && self.state != SVInfiniteScrollingStateStopped)
+
+        if (contentOffset.y < scrollOffsetThreshold && self.state != SVInfiniteScrollingStateStopped)
             self.state = SVInfiniteScrollingStateStopped;
+
+        if ((!scrollView.isDragging || force) && self.state == SVInfiniteScrollingStateTriggered)
+            self.state = SVInfiniteScrollingStateLoading;
     }
 }
 
