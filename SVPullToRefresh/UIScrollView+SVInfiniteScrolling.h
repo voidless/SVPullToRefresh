@@ -23,7 +23,7 @@ typedef enum {
 
 - (void)addInfiniteScrollingWithActionHandler:(InfiniteScrollingActionHandler)actionHandler infiniteScrollingView:(UIView <SVInfiniteScrollingViewProtocol> *)infiniteScrollingView;
 - (void)removeInfiniteScrolling;
-
+- (void)updateInfiniteScrolling;
 
 @property (nonatomic, strong, readonly) SVInfiniteScrollingControl *infiniteScrollingControl;
 @property (nonatomic, assign) BOOL showsInfiniteScrolling;

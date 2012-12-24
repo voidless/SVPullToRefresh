@@ -42,6 +42,12 @@
     self.state = SVInfiniteScrollingStateStopped;
 }
 
+#pragma mark Force updates
+
+- (void)updateCurrentState {
+    [self scrollViewDidScroll:scrollView.contentOffset force:YES];
+}
+
 #pragma mark Setters
 
 - (void)setHidden:(BOOL)_hidden {
@@ -133,7 +139,6 @@
     else if([keyPath isEqualToString:@"contentSize"]) {
         [infiniteScrollingView layoutSubviews];
         [self updateInfiniteScrollingViewFrame];
-        [self scrollViewDidScroll:scrollView.contentOffset force:YES];
     }
 }
 

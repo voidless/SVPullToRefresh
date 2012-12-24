@@ -68,4 +68,8 @@ static char UIScrollViewInfiniteScrollingControl;
     self.infiniteScrollingControl = nil;
 }
 
+- (void)updateInfiniteScrolling {
+    [self.infiniteScrollingControl updateCurrentState];
+}
+
 @end

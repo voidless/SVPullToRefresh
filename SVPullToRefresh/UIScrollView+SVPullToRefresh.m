@@ -65,4 +65,8 @@ static char UIScrollViewPullToRefreshControl;
     self.pullToRefreshControl = nil;
 }
 
+- (void)updatePullToRefresh {
+    [self.pullToRefreshControl updateCurrentState];
+}
+
 @end

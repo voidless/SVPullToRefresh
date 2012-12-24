@@ -14,5 +14,6 @@ typedef void (^PullToRefreshActionHandler)(void);
 - (id)initWithScrollView:(UIScrollView *)scrollView actionHandler:(PullToRefreshActionHandler)handler;
 
 - (void)loadingCompleted;
+- (void)updateCurrentState;
 
 @end

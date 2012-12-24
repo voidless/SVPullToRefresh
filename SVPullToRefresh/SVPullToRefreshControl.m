@@ -41,6 +41,12 @@
     self.state = SVPullToRefreshStateStopped;
 }
 
+#pragma mark Force updates
+
+- (void)updateCurrentState {
+    [self scrollViewDidScroll:scrollView.contentOffset];
+}
+
 #pragma mark Setters
 
 - (void)setHidden:(BOOL)_hidden {

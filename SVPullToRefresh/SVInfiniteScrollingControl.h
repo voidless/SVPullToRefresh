@@ -14,5 +14,6 @@ typedef void (^InfiniteScrollingActionHandler)(void);
 - (id)initWithScrollView:(UIScrollView *)scrollView actionHandler:(InfiniteScrollingActionHandler)handler;
 
 - (void)loadingCompleted;
+- (void)updateCurrentState;
 
 @end
