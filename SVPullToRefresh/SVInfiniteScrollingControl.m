@@ -14,6 +14,8 @@
     CGFloat originalBottomInset;
     CGFloat viewHeight;
     InfiniteScrollingActionHandler actionHandler;
+
+    BOOL changingContentInset;
 }
 @synthesize observing;
 @synthesize hidden;
@@ -23,9 +25,10 @@
 - (id)initWithScrollView:(UIScrollView *)_scrollView infiniteScrollingView:(UIView <SVInfiniteScrollingViewProtocol> *)_infiniteScrollingView actionHandler:(InfiniteScrollingActionHandler)_handler {
     if (self = [super init]) {
         scrollView = _scrollView;
-        originalBottomInset = _scrollView.contentInset.bottom;
         state = SVInfiniteScrollingStateStopped;
         actionHandler = _handler;
+        originalBottomInset = scrollView.contentInset.bottom;
+        hidden = YES;
 
         self.infiniteScrollingView = _infiniteScrollingView;
     }
@@ -51,15 +54,17 @@
 #pragma mark Setters
 
 - (void)setHidden:(BOOL)_hidden {
-    hidden = _hidden;
     infiniteScrollingView.hidden = _hidden;
-    if (hidden) {
+    if (_hidden) {
         self.state = SVInfiniteScrollingStateStopped;
         [self resetScrollViewContentInset];
     } else {
+        if (hidden)
+            originalBottomInset = scrollView.contentInset.bottom;
         [self setScrollViewContentInsetForInfiniteScrolling];
         [self updateInfiniteScrollingViewFrame];
     }
+    hidden = _hidden;
 }
 
 - (void)setState:(SVInfiniteScrollingState)newState {
@@ -105,15 +110,25 @@
 #pragma mark Scroll View
 
 - (void)resetScrollViewContentInset {
+    if (changingContentInset)
+        return;
+
     UIEdgeInsets currentInsets = scrollView.contentInset;
     currentInsets.bottom = originalBottomInset;
+    changingContentInset = YES;
     [self setScrollViewContentInset:currentInsets];
+    changingContentInset = NO;
 }
 
 - (void)setScrollViewContentInsetForInfiniteScrolling {
+    if (changingContentInset)
+        return;
+
     UIEdgeInsets currentInsets = scrollView.contentInset;
     currentInsets.bottom = originalBottomInset + viewHeight;
+    changingContentInset = YES;
     [self setScrollViewContentInset:currentInsets];
+    changingContentInset = NO;
 }
 
 - (void)setScrollViewContentInset:(UIEdgeInsets)contentInset {
@@ -139,6 +154,18 @@
     else if([keyPath isEqualToString:@"contentSize"]) {
         [infiniteScrollingView layoutSubviews];
         [self updateInfiniteScrollingViewFrame];
+    }
+    else if([keyPath isEqualToString:@"contentInset"]) {
+        if (changingContentInset)
+            return;
+
+        originalBottomInset = [[change valueForKey:NSKeyValueChangeNewKey] UIEdgeInsetsValue].bottom;
+        if (!self.hidden) {
+            originalBottomInset -= viewHeight;
+            [self setScrollViewContentInsetForInfiniteScrolling];
+        } else {
+            [self resetScrollViewContentInset];
+        }
     }
 }
 

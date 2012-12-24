@@ -25,6 +25,7 @@
         originalTopInset = _scrollView.contentInset.top;
         state = SVPullToRefreshStateStopped;
         actionHandler = _handler;
+        hidden = YES;
 
         self.pullToRefreshView = _pullToRefreshView;
     }
