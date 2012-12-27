@@ -10,7 +10,7 @@
 
 @implementation SVPullToRefreshControl {
     __weak UIScrollView *scrollView;
-    CGFloat originalTopInset;
+    CGFloat localTopInset;
     CGFloat viewHeight;
     PullToRefreshActionHandler actionHandler;
 }
@@ -22,7 +22,6 @@
 - (id)initWithScrollView:(UIScrollView *)_scrollView pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)_pullToRefreshView actionHandler:(PullToRefreshActionHandler)_handler {
     if (self = [super init]) {
         scrollView = _scrollView;
-        originalTopInset = _scrollView.contentInset.top;
         state = SVPullToRefreshStateStopped;
         actionHandler = _handler;
         hidden = YES;
@@ -65,14 +64,14 @@
 
     switch (newState) {
         case SVPullToRefreshStateStopped:
-            [self resetScrollViewContentInset];
+            [self resetScrollViewContentInset:YES];
             break;
 
         case SVPullToRefreshStateTriggered:
             break;
 
         case SVPullToRefreshStateLoading:
-            [self setScrollViewContentInsetForLoading];
+            [self setScrollViewContentInsetForLoading:YES];
 
             if (previousState == SVPullToRefreshStateTriggered && actionHandler)
                 actionHandler();
@@ -95,25 +94,33 @@
     pullToRefreshView.state = self.state;
 
     if (!self.hidden && self.state == SVPullToRefreshStateLoading)
-        [self setScrollViewContentInsetForLoading];
+        [self setScrollViewContentInsetForLoading:NO];
 }
 
 #pragma mark Scroll View
 
-- (void)resetScrollViewContentInset {
+- (void)resetScrollViewContentInset:(BOOL)animated {
     UIEdgeInsets currentInsets = scrollView.contentInset;
-    currentInsets.top = originalTopInset;
-    [self setScrollViewContentInset:currentInsets];
+    currentInsets.top -= localTopInset;
+    localTopInset = 0;
+    [self setScrollViewContentInset:currentInsets animated:animated];
 }
 
-- (void)setScrollViewContentInsetForLoading {
+- (void)setScrollViewContentInsetForLoading:(BOOL)animated {
     CGFloat offset = MAX(scrollView.contentOffset.y * -1, 0);
     UIEdgeInsets currentInsets = scrollView.contentInset;
-    currentInsets.top = MIN(offset, originalTopInset + viewHeight);
-    [self setScrollViewContentInset:currentInsets];
+    currentInsets.top -= localTopInset;
+    localTopInset = MIN(offset, currentInsets.top + viewHeight);
+    currentInsets.top += localTopInset;
+    [self setScrollViewContentInset:currentInsets animated:animated];
 }
 
-- (void)setScrollViewContentInset:(UIEdgeInsets)contentInset {
+- (void)setScrollViewContentInset:(UIEdgeInsets)contentInset animated:(BOOL)animated {
+    if (!animated) {
+        scrollView.contentInset = contentInset;
+        return;
+    }
+
     [UIView animateWithDuration:CHANGE_CONTENT_INSET_ANIM_DURATION delay:0
                         options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
@@ -133,7 +140,7 @@
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     if (self.state != SVPullToRefreshStateLoading) {
-        CGFloat scrollOffsetThreshold = pullToRefreshView.frame.origin.y - originalTopInset;
+        CGFloat scrollOffsetThreshold = pullToRefreshView.frame.origin.y - (scrollView.contentInset.top - localTopInset);
 
         if (!scrollView.isDragging && self.state == SVPullToRefreshStateTriggered)
             self.state = SVPullToRefreshStateLoading;
@@ -142,10 +149,10 @@
         else if (contentOffset.y >= scrollOffsetThreshold && self.state != SVPullToRefreshStateStopped)
             self.state = SVPullToRefreshStateStopped;
     } else {
-        if (scrollView.contentOffset.y >= -originalTopInset) {
-            [self resetScrollViewContentInset];
+        if (scrollView.contentOffset.y >= -(scrollView.contentInset.top - localTopInset)) {
+            [self resetScrollViewContentInset:NO];
         } else {
-            [self setScrollViewContentInsetForLoading];
+            [self setScrollViewContentInsetForLoading:NO];
         }
     }
 }

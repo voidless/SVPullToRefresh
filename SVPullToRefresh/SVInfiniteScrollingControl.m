@@ -11,7 +11,7 @@
 
 @implementation SVInfiniteScrollingControl {
     __weak UIScrollView *scrollView;
-    CGFloat originalBottomInset;
+    CGFloat localBottomInset;
     CGFloat viewHeight;
     InfiniteScrollingActionHandler actionHandler;
 
@@ -27,7 +27,6 @@
         scrollView = _scrollView;
         state = SVInfiniteScrollingStateStopped;
         actionHandler = _handler;
-        originalBottomInset = scrollView.contentInset.bottom;
         hidden = YES;
 
         self.infiniteScrollingView = _infiniteScrollingView;
@@ -59,8 +58,6 @@
         self.state = SVInfiniteScrollingStateStopped;
         [self resetScrollViewContentInset];
     } else {
-        if (hidden)
-            originalBottomInset = scrollView.contentInset.bottom;
         [self setScrollViewContentInsetForInfiniteScrolling];
         [self updateInfiniteScrollingViewFrame];
     }
@@ -114,9 +111,10 @@
         return;
 
     UIEdgeInsets currentInsets = scrollView.contentInset;
-    currentInsets.bottom = originalBottomInset;
+    currentInsets.bottom -= localBottomInset;
+    localBottomInset = 0;
     changingContentInset = YES;
-    [self setScrollViewContentInset:currentInsets];
+    [self setScrollViewContentInset:currentInsets animated:YES];
     changingContentInset = NO;
 }
 
@@ -125,13 +123,20 @@
         return;
 
     UIEdgeInsets currentInsets = scrollView.contentInset;
-    currentInsets.bottom = originalBottomInset + viewHeight;
+    currentInsets.bottom -= localBottomInset;
+    localBottomInset = viewHeight;
+    currentInsets.bottom += localBottomInset;
     changingContentInset = YES;
-    [self setScrollViewContentInset:currentInsets];
+    [self setScrollViewContentInset:currentInsets animated:NO];
     changingContentInset = NO;
 }
 
-- (void)setScrollViewContentInset:(UIEdgeInsets)contentInset {
+- (void)setScrollViewContentInset:(UIEdgeInsets)contentInset animated:(BOOL)animated {
+    if (!animated) {
+        scrollView.contentInset = contentInset;
+        return;
+    }
+
     [UIView animateWithDuration:0.3
                           delay:0
                         options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
@@ -144,6 +149,9 @@
 #pragma mark - Observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (changingContentInset)
+        return;
+
     if ([keyPath isEqualToString:@"contentOffset"])
         [self scrollViewDidScroll:[[change valueForKey:NSKeyValueChangeNewKey] CGPointValue] force:NO];
     else if ([keyPath isEqualToString:@"frame"]) {
@@ -156,12 +164,7 @@
         [self updateInfiniteScrollingViewFrame];
     }
     else if([keyPath isEqualToString:@"contentInset"]) {
-        if (changingContentInset)
-            return;
-
-        originalBottomInset = [[change valueForKey:NSKeyValueChangeNewKey] UIEdgeInsetsValue].bottom;
         if (!self.hidden) {
-            originalBottomInset -= viewHeight;
             [self setScrollViewContentInsetForInfiniteScrolling];
         } else {
             [self resetScrollViewContentInset];
