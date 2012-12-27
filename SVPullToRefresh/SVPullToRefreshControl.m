@@ -37,6 +37,10 @@
     return [self initWithScrollView:_scrollView pullToRefreshView:defaultView actionHandler:_handler];
 }
 
+- (void)dealloc {
+    [self.pullToRefreshView removeFromSuperview];
+}
+
 - (void)loadingCompleted {
     self.state = SVPullToRefreshStateStopped;
 }

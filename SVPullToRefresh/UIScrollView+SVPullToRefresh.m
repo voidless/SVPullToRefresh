@@ -41,18 +41,26 @@ static char UIScrollViewPullToRefreshControl;
     self.pullToRefreshControl.hidden = !showsPullToRefresh;
     
     if(!showsPullToRefresh) {
-      if (self.pullToRefreshControl.observing) {
-        [self removeObserver:self.pullToRefreshControl forKeyPath:@"contentOffset"];
-        [self removeObserver:self.pullToRefreshControl forKeyPath:@"frame"];
-        self.pullToRefreshControl.observing = NO;
-      }
+        [self stopObservingPullToRefresh];
     }
     else {
-      if (!self.pullToRefreshControl.observing) {
+        [self startObservingPullToRefresh];
+    }
+}
+
+- (void)startObservingPullToRefresh {
+    if (!self.pullToRefreshControl.observing) {
         [self addObserver:self.pullToRefreshControl forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
         [self addObserver:self.pullToRefreshControl forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
         self.pullToRefreshControl.observing = YES;
-      }
+    }
+}
+
+- (void)stopObservingPullToRefresh {
+    if (self.pullToRefreshControl.observing) {
+        [self removeObserver:self.pullToRefreshControl forKeyPath:@"contentOffset"];
+        [self removeObserver:self.pullToRefreshControl forKeyPath:@"frame"];
+        self.pullToRefreshControl.observing = NO;
     }
 }
 
@@ -61,7 +69,7 @@ static char UIScrollViewPullToRefreshControl;
 }
 
 - (void)removePullToRefresh {
-    self.showsPullToRefresh = NO;
+    [self stopObservingPullToRefresh];
     self.pullToRefreshControl = nil;
 }
 

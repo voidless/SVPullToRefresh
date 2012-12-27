@@ -40,6 +40,10 @@
     return [self initWithScrollView:_scrollView infiniteScrollingView:defaultView actionHandler:_handler];
 }
 
+- (void)dealloc {
+    [self.infiniteScrollingView removeFromSuperview];
+}
+
 - (void)loadingCompleted {
     self.state = SVInfiniteScrollingStateStopped;
 }

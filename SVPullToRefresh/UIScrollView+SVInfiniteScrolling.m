@@ -42,22 +42,30 @@ static char UIScrollViewInfiniteScrollingControl;
     self.infiniteScrollingControl.hidden = !showsInfiniteScrolling;
 
     if(!showsInfiniteScrolling) {
-        if (self.infiniteScrollingControl.observing) {
-            [self removeObserver:self.infiniteScrollingControl forKeyPath:@"contentInset"];
-            [self removeObserver:self.infiniteScrollingControl forKeyPath:@"contentOffset"];
-            [self removeObserver:self.infiniteScrollingControl forKeyPath:@"contentSize"];
-            [self removeObserver:self.infiniteScrollingControl forKeyPath:@"frame"];
-            self.infiniteScrollingControl.observing = NO;
-        }
+        [self stopObservingInfiniteScrolling];
     }
     else {
-        if (!self.infiniteScrollingControl.observing) {
-            [self addObserver:self.infiniteScrollingControl forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:nil];
-            [self addObserver:self.infiniteScrollingControl forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
-            [self addObserver:self.infiniteScrollingControl forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
-            [self addObserver:self.infiniteScrollingControl forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-            self.infiniteScrollingControl.observing = YES;
-        }
+        [self startObservingInfiniteScrolling];
+    }
+}
+
+- (void)startObservingInfiniteScrolling {
+    if (!self.infiniteScrollingControl.observing) {
+        [self addObserver:self.infiniteScrollingControl forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:nil];
+        [self addObserver:self.infiniteScrollingControl forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
+        [self addObserver:self.infiniteScrollingControl forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
+        [self addObserver:self.infiniteScrollingControl forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+        self.infiniteScrollingControl.observing = YES;
+    }
+}
+
+- (void)stopObservingInfiniteScrolling {
+    if (self.infiniteScrollingControl.observing) {
+        [self removeObserver:self.infiniteScrollingControl forKeyPath:@"contentInset"];
+        [self removeObserver:self.infiniteScrollingControl forKeyPath:@"contentOffset"];
+        [self removeObserver:self.infiniteScrollingControl forKeyPath:@"contentSize"];
+        [self removeObserver:self.infiniteScrollingControl forKeyPath:@"frame"];
+        self.infiniteScrollingControl.observing = NO;
     }
 }
 
@@ -66,7 +74,7 @@ static char UIScrollViewInfiniteScrollingControl;
 }
 
 - (void)removeInfiniteScrolling {
-    self.showsInfiniteScrolling = NO;
+    [self stopObservingInfiniteScrolling];
     self.infiniteScrollingControl = nil;
 }
 
