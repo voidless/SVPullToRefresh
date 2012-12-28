@@ -92,6 +92,7 @@
 - (void)setPullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)_pullToRefreshView {
     [pullToRefreshView removeFromSuperview];
     pullToRefreshView = _pullToRefreshView;
+    pullToRefreshView.autoresizingMask = UIViewAutoresizingNone;
     viewHeight = pullToRefreshView.bounds.size.height;
     pullToRefreshView.frame = CGRectMake(0, -viewHeight, pullToRefreshView.bounds.size.width, viewHeight);
     [scrollView addSubview:pullToRefreshView];

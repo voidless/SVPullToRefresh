@@ -98,6 +98,7 @@
 - (void)setInfiniteScrollingView:(UIView <SVInfiniteScrollingViewProtocol> *)_infiniteScrollingView {
     [infiniteScrollingView removeFromSuperview];
     infiniteScrollingView = _infiniteScrollingView;
+    infiniteScrollingView.autoresizingMask = UIViewAutoresizingNone;
     viewHeight = infiniteScrollingView.bounds.size.height;
     [self updateInfiniteScrollingViewFrame];
     [scrollView addSubview:infiniteScrollingView];
