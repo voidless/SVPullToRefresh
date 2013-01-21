@@ -55,6 +55,7 @@
 
 - (void)setHidden:(BOOL)_hidden {
     hidden = _hidden;
+    pullToRefreshView.hidden = hidden;
     if (hidden)
         self.state = SVPullToRefreshStateStopped;
 }
