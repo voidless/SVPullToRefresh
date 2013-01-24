@@ -82,4 +82,8 @@ static char UIScrollViewInfiniteScrollingControl;
     [self.infiniteScrollingControl updateCurrentState];
 }
 
+- (void)setInfiniteScrollingFireHeight:(CGFloat)height {
+    [self.infiniteScrollingControl setFireHeight:height];
+}
+
 @end

@@ -13,6 +13,8 @@ typedef void (^InfiniteScrollingActionHandler)(void);
 - (id)initWithScrollView:(UIScrollView *)scrollView infiniteScrollingView:(UIView <SVInfiniteScrollingViewProtocol> *)infiniteScrollingView actionHandler:(InfiniteScrollingActionHandler)handler;
 - (id)initWithScrollView:(UIScrollView *)scrollView actionHandler:(InfiniteScrollingActionHandler)handler;
 
+- (void)setFireHeight:(CGFloat)height;
+
 - (void)loadingCompleted;
 - (void)updateCurrentState;
 

@@ -16,6 +16,7 @@
     InfiniteScrollingActionHandler actionHandler;
 
     BOOL changingContentInset;
+    CGFloat fireHeight;
 }
 @synthesize observing;
 @synthesize hidden;
@@ -109,6 +110,11 @@
         [self setScrollViewContentInsetForInfiniteScrolling];
 }
 
+- (void)setFireHeight:(CGFloat)height {
+    fireHeight = height;
+    [self scrollViewDidScroll:scrollView.contentOffset force:YES];
+}
+
 #pragma mark Scroll View
 
 - (void)resetScrollViewContentInset {
@@ -180,7 +186,7 @@
 - (void)scrollViewDidScroll:(CGPoint)contentOffset force:(BOOL)force {
     if (self.state != SVInfiniteScrollingStateLoading) {
         CGFloat scrollViewContentHeight = scrollView.contentSize.height;
-        CGFloat scrollOffsetThreshold = scrollViewContentHeight - scrollView.bounds.size.height;
+        CGFloat scrollOffsetThreshold = scrollViewContentHeight - scrollView.bounds.size.height - fireHeight;
 
         if (contentOffset.y > scrollOffsetThreshold && self.state == SVInfiniteScrollingStateStopped && (scrollView.isDecelerating || force))
             self.state = SVInfiniteScrollingStateTriggered;
