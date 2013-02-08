@@ -67,7 +67,7 @@ static char UIScrollViewBottomPullToRefreshControl;
 }
 
 - (BOOL)showsBottomPullToRefresh {
-    return !self.bottomPullToRefreshControl.hidden;
+    return self.bottomPullToRefreshControl && !self.bottomPullToRefreshControl.hidden;
 }
 
 - (void)removeBottomPullToRefresh {

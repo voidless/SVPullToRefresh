@@ -65,7 +65,7 @@ static char UIScrollViewPullToRefreshControl;
 }
 
 - (BOOL)showsPullToRefresh {
-    return !self.pullToRefreshControl.hidden;
+    return self.pullToRefreshControl && !self.pullToRefreshControl.hidden;
 }
 
 - (void)removePullToRefresh {

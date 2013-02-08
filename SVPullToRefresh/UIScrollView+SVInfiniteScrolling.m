@@ -70,7 +70,7 @@ static char UIScrollViewInfiniteScrollingControl;
 }
 
 - (BOOL)showsInfiniteScrolling {
-    return !self.infiniteScrollingControl.hidden;
+    return self.infiniteScrollingControl && !self.infiniteScrollingControl.hidden;
 }
 
 - (void)removeInfiniteScrolling {
