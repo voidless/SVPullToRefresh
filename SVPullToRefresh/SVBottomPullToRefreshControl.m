@@ -114,7 +114,7 @@
 }
 
 - (void)updatePullToRefreshViewFrame {
-    pullToRefreshView.frame = CGRectMake(0, scrollView.contentSize.height - bottomInset, pullToRefreshView.bounds.size.width, viewHeight);
+    pullToRefreshView.frame = CGRectMake(0, scrollView.contentSize.height - bottomInset, CGRectGetWidth(scrollView.bounds), viewHeight);
 }
 
 #pragma mark Scroll View
