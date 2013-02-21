@@ -102,6 +102,7 @@
     viewHeight = pullToRefreshView.bounds.size.height;
     [self updatePullToRefreshViewFrame];
     [scrollView addSubview:pullToRefreshView];
+    [scrollView sendSubviewToBack:pullToRefreshView];
     pullToRefreshView.state = self.state;
 
     if (!self.hidden && self.state == SVPullToRefreshStateLoading)
