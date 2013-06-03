@@ -46,13 +46,13 @@
     self.state = SVPullToRefreshStateStopped;
 }
 
-#pragma mark Force updates
+#pragma mark - Force updates
 
 - (void)updateCurrentState {
     [self scrollViewDidScroll:scrollView.contentOffset];
 }
 
-#pragma mark Setters
+#pragma mark - Setters
 
 - (void)setHidden:(BOOL)_hidden {
     hidden = _hidden;
@@ -118,7 +118,7 @@
     pullToRefreshView.frame = CGRectMake(0, scrollView.contentSize.height - bottomInset, CGRectGetWidth(scrollView.bounds), viewHeight);
 }
 
-#pragma mark Scroll View
+#pragma mark - Scroll View
 
 - (void)resetScrollViewContentInset:(BOOL)animated {
     UIEdgeInsets currentInsets = scrollView.contentInset;

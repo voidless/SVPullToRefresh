@@ -49,13 +49,13 @@
     self.state = SVInfiniteScrollingStateStopped;
 }
 
-#pragma mark Force updates
+#pragma mark - Force updates
 
 - (void)updateCurrentState {
     [self scrollViewDidScroll:scrollView.contentOffset force:YES];
 }
 
-#pragma mark Setters
+#pragma mark - Setters
 
 - (void)setHidden:(BOOL)_hidden {
     infiniteScrollingView.hidden = _hidden;
@@ -115,7 +115,7 @@
     [self scrollViewDidScroll:scrollView.contentOffset force:YES];
 }
 
-#pragma mark Scroll View
+#pragma mark - Scroll View
 
 - (void)resetScrollViewContentInset {
     if (changingContentInset)
