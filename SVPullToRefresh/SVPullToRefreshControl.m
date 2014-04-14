@@ -113,10 +113,9 @@
 }
 
 - (void)setScrollViewContentInsetForLoading:(BOOL)animated {
-    CGFloat offset = MAX(scrollView.contentOffset.y * -1, 0);
     UIEdgeInsets currentInsets = scrollView.contentInset;
     currentInsets.top -= localTopInset;
-    localTopInset = MIN(offset, currentInsets.top + viewHeight);
+    localTopInset = viewHeight;
     currentInsets.top += localTopInset;
     [self setScrollViewContentInset:currentInsets animated:animated];
 }
