@@ -115,7 +115,8 @@
 }
 
 - (void)updatePullToRefreshViewFrame {
-    pullToRefreshView.frame = CGRectMake(0, scrollView.contentSize.height - bottomInset, CGRectGetWidth(scrollView.bounds), viewHeight);
+    CGFloat height = MAX(scrollView.contentSize.height, scrollView.bounds.size.height);
+    pullToRefreshView.frame = CGRectMake(0, height - bottomInset, CGRectGetWidth(scrollView.bounds), viewHeight);
 }
 
 #pragma mark - Scroll View
@@ -164,7 +165,8 @@
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     if (self.state != SVPullToRefreshStateLoading) {
-        CGFloat scrollOffsetThreshold = pullToRefreshView.frame.size.height + scrollView.contentSize.height - (scrollView.bounds.size.height - scrollView.contentInset.bottom + localBottomInset);
+        CGFloat height = MAX(scrollView.contentSize.height, scrollView.bounds.size.height);
+        CGFloat scrollOffsetThreshold = pullToRefreshView.frame.size.height + height - (scrollView.bounds.size.height - scrollView.contentInset.bottom + localBottomInset);
 
         if (!scrollView.isDragging && self.state == SVPullToRefreshStateTriggered)
             self.state = SVPullToRefreshStateLoading;
