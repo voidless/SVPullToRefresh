@@ -10,13 +10,6 @@
 #import <UIKit/UIKit.h>
 #import "SVPullToRefreshControl.h"
 
-typedef enum {
-    SVPullToRefreshStateStopped = 0,
-    SVPullToRefreshStateTriggered,
-    SVPullToRefreshStateLoading,
-    SVPullToRefreshStateAll = 10
-} SVPullToRefreshState;
-
 @class SVPullToRefreshControl;
 
 @interface UIScrollView (SVPullToRefresh)

@@ -1,5 +1,14 @@
 #import <Foundation/Foundation.h>
 
+
+typedef enum {
+    SVPullToRefreshStateStopped = 0,
+    SVPullToRefreshStateTriggered,
+    SVPullToRefreshStateLoading,
+    SVPullToRefreshStateAll = 10
+} SVPullToRefreshState;
+
+
 @protocol SVPullToRefreshViewProtocol;
 
 typedef void (^PullToRefreshActionHandler)(void);
@@ -8,6 +17,7 @@ typedef void (^PullToRefreshActionHandler)(void);
 
 @property (nonatomic, assign) BOOL observing;
 @property (nonatomic, assign) BOOL hidden;
+@property (nonatomic, assign) SVPullToRefreshState state;
 @property (nonatomic, strong) UIView <SVPullToRefreshViewProtocol> *pullToRefreshView;
 
 - (id)initWithScrollView:(UIScrollView *)scrollView pullToRefreshView:(UIView <SVPullToRefreshViewProtocol> *)pullToRefreshView actionHandler:(PullToRefreshActionHandler)handler;

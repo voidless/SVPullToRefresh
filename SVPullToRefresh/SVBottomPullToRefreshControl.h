@@ -7,6 +7,7 @@
 
 @property (nonatomic, assign) BOOL observing;
 @property (nonatomic, assign) BOOL hidden;
+@property (nonatomic, assign) SVPullToRefreshState state;
 @property (nonatomic, assign) CGFloat bottomInset;
 @property (nonatomic, strong) UIView <SVPullToRefreshViewProtocol> *pullToRefreshView;
 @property (nonatomic, assign) BOOL nowLoading;

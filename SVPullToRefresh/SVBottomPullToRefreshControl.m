@@ -1,11 +1,9 @@
 #import "SVBottomPullToRefreshControl.h"
 #import "SVPullToRefreshDefaultView.h"
 
+
 #define CHANGE_CONTENT_INSET_ANIM_DURATION 0.3
 
-@interface SVBottomPullToRefreshControl ()
-@property (nonatomic, assign) SVPullToRefreshState state;
-@end
 
 @implementation SVBottomPullToRefreshControl {
     __weak UIScrollView *scrollView;

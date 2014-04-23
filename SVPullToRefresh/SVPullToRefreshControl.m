@@ -1,12 +1,13 @@
 #import "SVPullToRefreshControl.h"
-#import "UIScrollView+SVPullToRefresh.h"
 #import "SVPullToRefreshDefaultView.h"
+
 
 #define CHANGE_CONTENT_INSET_ANIM_DURATION 0.3
 
+
 @interface SVPullToRefreshControl ()
-@property (nonatomic, assign) SVPullToRefreshState state;
 @end
+
 
 @implementation SVPullToRefreshControl {
     __weak UIScrollView *scrollView;
