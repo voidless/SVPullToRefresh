@@ -154,12 +154,6 @@
             self.state = SVPullToRefreshStateTriggered;
         else if (contentOffset.y >= scrollOffsetThreshold && self.state != SVPullToRefreshStateStopped)
             self.state = SVPullToRefreshStateStopped;
-    } else {
-        if (scrollView.contentOffset.y >= -(scrollView.contentInset.top - localTopInset)) {
-            [self resetScrollViewContentInset:NO];
-        } else {
-            [self setScrollViewContentInsetForLoading:NO];
-        }
     }
 }
 
